@@ -50,7 +50,7 @@ void vLedHB_task()
 
 void vOLED_task(void *pvParameters)
 {
-    
+
     printf("OLED_test Demo\r\n");
     if(DEV_Module_Init()!=0){
         while(1){

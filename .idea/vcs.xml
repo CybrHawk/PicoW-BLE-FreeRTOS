@@ -3,8 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel/portable/ThirdParty/Community-Supported-Ports" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel/portable/ThirdParty/Partner-Supported-Ports" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel/portable/ThirdParty/Community-Supported-Ports" vcs="" />
+    <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel/portable/ThirdParty/Partner-Supported-Ports" vcs="" />
     <mapping directory="P:/RaspberryPicoSDK/pico-sdk" vcs="Git" />
     <mapping directory="P:/RaspberryPicoSDK/pico-sdk/lib/btstack" vcs="Git" />
     <mapping directory="P:/RaspberryPicoSDK/pico-sdk/lib/cyw43-driver" vcs="Git" />
