@@ -21,9 +21,9 @@ pico_sdk_init()
 # Add subdirectories
 add_subdirectory(src)
 
-# if you have anything in "lib" folder then uncomment below - remember to add a CMakeLists.txt
 # file to the "lib" directory
-add_subdirectory(lib/Config)
-add_subdirectory(lib/OLED)
-add_subdirectory(lib/Fonts)
-add_subdirectory(lib/GUI)
+add_subdirectory(lib/config)
+add_subdirectory(lib/lcd)
+add_subdirectory(lib/font)
+add_subdirectory(lib/fatfs)
+add_subdirectory(lib/sdcard)

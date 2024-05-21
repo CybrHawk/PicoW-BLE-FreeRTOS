@@ -1,4 +1,4 @@
-# Install script for directory: D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/lib/Config
+# Install script for directory: D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/lib/config
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

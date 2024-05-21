@@ -1,5 +1,5 @@
 #include <stdio.h>
-//#include "pico/stdlib.h" //Cause problemes de debugage multitreahd ?
+#include <stdlib.h> // malloc() free(), mandatory
 #include "pico/multicore.h"
 #include "pico/cyw43_arch.h"
 #include "FreeRTOS.h"
@@ -7,13 +7,19 @@
 #include "semphr.h"
 #include "queue.h"
 
-#include "debug.h"
+//#include "debug.h" //Used for debugging function, such as LEDs and additionnal buttons
 
-//OLED
-#include <stdlib.h> // malloc() free(), mandatory
-#include "OLED_1in3_c.h"
+//LCD
 #include "DEV_Config.h"
-#include "GUI_Paint.h"
+#include "LCD_Driver.h"
+#include "LCD_Touch.h"
+#include "LCD_GUI.h"
+#include "LCD_Bmp.h"
+#include <stdio.h>
+#include "hardware/watchdog.h"
+//#include "pico/stdlib.h"
+
+
 
 static QueueHandle_t xQueue = NULL;
 
@@ -48,72 +54,41 @@ void vLedHB_task()
     }
 }
 
-void vOLED_task(void *pvParameters)
-{
+void vLCD_task(void *pvParameters) {
+    printf("LCD_test Demo\r\n");
+    uint8_t counter = 0;
+    Button myButton = {00, 270, 240, 320};
 
-    printf("OLED_test Demo\r\n");
-    if(DEV_Module_Init()!=0){
-        while(1){
-            printf("END\r\n");
+    System_Init();
+    LCD_SCAN_DIR  lcd_scan_dir = SCAN_DIR_DFT;
+    LCD_Init(lcd_scan_dir,800);
+    TP_Init(lcd_scan_dir);
+
+    //GUI_Show(); //Test if the GUI is working via the example code
+    //Driver_Delay_ms(1500);
+
+    TP_Adjust(); // Uncomment this line to calibrate the touchscreen
+    drawButton(myButton); // Draw the button for the first time
+
+    while(true) {
+        // Check if the touchscreen is pressed
+
+        if (isButtonPressed(myButton, lcd_scan_dir)) {
+            button_pressed();
+            drawButton(myButton);
+            vTaskDelay(pdMS_TO_TICKS(100));
         }
     }
-    
-    /* Init */
-    OLED_1in3_C_Init();
-    OLED_1in3_C_Clear();
+    vTaskDelete(NULL); // Delete this task (NULL = this task), normally never reached
+}
 
-    
-    UBYTE *BlackImage;
-    UWORD Imagesize = ((OLED_1in3_C_WIDTH%8==0)? (OLED_1in3_C_WIDTH/8): (OLED_1in3_C_WIDTH/8+1)) * OLED_1in3_C_HEIGHT;
-    if((BlackImage = (UBYTE *)malloc(Imagesize)) == NULL) {
-        while(1){
-            printf("Failed to apply for black memory...\r\n");
-        }
+void vBLE_client_task() {
+    //Envoyer les infos du capteur a l'ecran via Queue
+
+    while(true){
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
-    printf("Paint_NewImage\r\n");
-    Paint_NewImage(BlackImage, OLED_1in3_C_WIDTH, OLED_1in3_C_HEIGHT, 0, WHITE);	
-    
-    
-    
-    printf("Drawing\r\n");
-vTaskDelay(pdMS_TO_TICKS(4000));
-    Paint_SelectImage(BlackImage);
-    Paint_Clear(BLACK);
-    
-
-    printf("Begin Drawing:page 1\r\n");
-    Paint_DrawPoint(20, 10, WHITE, DOT_PIXEL_1X1, DOT_STYLE_DFT);
-    Paint_DrawPoint(30, 10, WHITE, DOT_PIXEL_2X2, DOT_STYLE_DFT);
-    Paint_DrawPoint(40, 10, WHITE, DOT_PIXEL_3X3, DOT_STYLE_DFT);
-    Paint_DrawLine(10, 10, 10, 20, WHITE, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
-    Paint_DrawLine(20, 20, 20, 30, WHITE, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
-    Paint_DrawLine(30, 30, 30, 40, WHITE, DOT_PIXEL_1X1, LINE_STYLE_DOTTED);
-    Paint_DrawLine(40, 40, 40, 50, WHITE, DOT_PIXEL_1X1, LINE_STYLE_DOTTED);
-    Paint_DrawCircle(60, 30, 15, WHITE, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
-    Paint_DrawCircle(100, 40, 20, WHITE, DOT_PIXEL_1X1, DRAW_FILL_FULL);
-    Paint_DrawRectangle(50, 30, 60, 40, WHITE, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
-    Paint_DrawRectangle(90, 30, 110, 50, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
-    BlackImage[0] = 0xf0;
-
-    OLED_1in3_C_Display(BlackImage);
-
-    vTaskDelay(pdMS_TO_TICKS(1000));
-
-    Paint_Clear(BLACK);
-    Paint_DrawString_EN(10, 0, "Pico-OLED", &Font16, WHITE, BLACK);
-    Paint_DrawString_EN(10, 15, "Built on", &Font16, WHITE, BLACK);
-    Paint_DrawString_EN(10, 30, __TIME__" ", &Font16, WHITE, BLACK);
-    OLED_1in3_C_Display(BlackImage);
-
-    vTaskDelay(pdMS_TO_TICKS(100));
-    printf("Done Drawing:page 1\r\n");
-
-    vTaskDelete(NULL); // Delete this task (NULL = this task), then while loop never reached
-
-    while (true) { // This loop is never reached if TaskDelete worked
-        vTaskDelay(pdMS_TO_TICKS(500));
-        printf("OLED IDLE\r\n");
-    }
+    vTaskDelete(NULL); // Delete this task (NULL = this task), normally never reached
 }
 
 
@@ -137,7 +112,9 @@ void main(){
 
     xTaskCreate(vLedHB_task, "HB_Task", 256, NULL, 5, NULL);
 
-    xTaskCreate(vOLED_task, "OLED_Task", 2048, NULL, 6, NULL); //Forcing on a handle doest work; why ? 
+    xTaskCreate(vLCD_task, "LCD_Task", 4096, NULL, 6, NULL);
+
+    xTaskCreate(vBLE_client_task, "BLE_Task", 2048, NULL, 4, NULL);
 
     #if DEBUG
     xTaskCreate(vLed_task1, "LED_Task1", 256, NULL, 3, NULL);

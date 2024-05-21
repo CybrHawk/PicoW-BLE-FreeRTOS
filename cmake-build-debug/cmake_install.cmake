@@ -43,9 +43,10 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/pico-sdk/cmake_install.cmake")
   include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/src/cmake_install.cmake")
   include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/Config/cmake_install.cmake")
-  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/OLED/cmake_install.cmake")
-  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/Fonts/cmake_install.cmake")
-  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/GUI/cmake_install.cmake")
+  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/lcd/cmake_install.cmake")
+  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/font/cmake_install.cmake")
+  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/fatfs/cmake_install.cmake")
+  include("D:/RaspPico/FreeRTOS/PicoW-BLE-FreeRTOS/cmake-build-debug/lib/sdcard/cmake_install.cmake")
 
 endif()
 

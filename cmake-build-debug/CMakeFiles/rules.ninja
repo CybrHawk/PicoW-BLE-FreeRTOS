@@ -82,7 +82,7 @@ rule CXX_EXECUTABLE_LINKER__PicoWBLEFreeRTOS_Debug
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__picow_ble_temp_sensor_unscanned_Debug
+rule ASM_COMPILER__picow_ble_server_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -o $out   -c $in
@@ -92,7 +92,7 @@ rule ASM_COMPILER__picow_ble_temp_sensor_unscanned_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__picow_ble_temp_sensor_unscanned_Debug
+rule C_COMPILER__picow_ble_server_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -102,7 +102,7 @@ rule C_COMPILER__picow_ble_temp_sensor_unscanned_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__picow_ble_temp_sensor_unscanned_Debug
+rule CXX_COMPILER__picow_ble_server_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -112,7 +112,7 @@ rule CXX_COMPILER__picow_ble_temp_sensor_unscanned_Debug
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__picow_ble_temp_sensor_Debug
+rule CXX_EXECUTABLE_LINKER__picow_ble_server_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $FLAGS -Wl,--build-id=none $LINK_FLAGS @$RSP_FILE -o $TARGET_FILE  && $POST_BUILD"
   description = Linking CXX executable $TARGET_FILE
   rspfile = $RSP_FILE
@@ -123,7 +123,7 @@ rule CXX_EXECUTABLE_LINKER__picow_ble_temp_sensor_Debug
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__picow_ble_temp_reader_unscanned_Debug
+rule ASM_COMPILER__picow_ble_client_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -o $out   -c $in
@@ -133,7 +133,7 @@ rule ASM_COMPILER__picow_ble_temp_reader_unscanned_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__picow_ble_temp_reader_unscanned_Debug
+rule C_COMPILER__picow_ble_client_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -143,7 +143,7 @@ rule C_COMPILER__picow_ble_temp_reader_unscanned_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__picow_ble_temp_reader_unscanned_Debug
+rule CXX_COMPILER__picow_ble_client_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -153,7 +153,7 @@ rule CXX_COMPILER__picow_ble_temp_reader_unscanned_Debug
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__picow_ble_temp_reader_Debug
+rule CXX_EXECUTABLE_LINKER__picow_ble_client_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $FLAGS -Wl,--build-id=none $LINK_FLAGS @$RSP_FILE -o $TARGET_FILE  && $POST_BUILD"
   description = Linking CXX executable $TARGET_FILE
   rspfile = $RSP_FILE
@@ -164,7 +164,7 @@ rule CXX_EXECUTABLE_LINKER__picow_ble_temp_reader_Debug
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__Config_unscanned_Debug
+rule ASM_COMPILER__config_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -o $out   -c $in
@@ -174,7 +174,7 @@ rule ASM_COMPILER__Config_unscanned_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__Config_unscanned_Debug
+rule C_COMPILER__config_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -184,7 +184,7 @@ rule C_COMPILER__Config_unscanned_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__Config_unscanned_Debug
+rule CXX_COMPILER__config_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -194,7 +194,7 @@ rule CXX_COMPILER__Config_unscanned_Debug
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__Config_Debug
+rule CXX_STATIC_LIBRARY_LINKER__config_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && "P:\CLion\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -E rm -f $TARGET_FILE && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
@@ -203,7 +203,7 @@ rule CXX_STATIC_LIBRARY_LINKER__Config_Debug
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__OLED_unscanned_Debug
+rule ASM_COMPILER__lcd_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -o $out   -c $in
@@ -213,7 +213,7 @@ rule ASM_COMPILER__OLED_unscanned_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__OLED_unscanned_Debug
+rule C_COMPILER__lcd_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -223,7 +223,7 @@ rule C_COMPILER__OLED_unscanned_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__OLED_unscanned_Debug
+rule CXX_COMPILER__lcd_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -233,7 +233,7 @@ rule CXX_COMPILER__OLED_unscanned_Debug
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__OLED_Debug
+rule CXX_STATIC_LIBRARY_LINKER__lcd_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && "P:\CLion\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -E rm -f $TARGET_FILE && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
@@ -242,7 +242,7 @@ rule CXX_STATIC_LIBRARY_LINKER__OLED_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__Fonts_unscanned_Debug
+rule C_COMPILER__font_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -252,7 +252,7 @@ rule C_COMPILER__Fonts_unscanned_Debug
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__Fonts_Debug
+rule C_STATIC_LIBRARY_LINKER__font_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && "P:\CLion\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -E rm -f $TARGET_FILE && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -261,7 +261,7 @@ rule C_STATIC_LIBRARY_LINKER__Fonts_Debug
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__GUI_unscanned_Debug
+rule ASM_COMPILER__fatfs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -o $out   -c $in
@@ -271,7 +271,7 @@ rule ASM_COMPILER__GUI_unscanned_Debug
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__GUI_unscanned_Debug
+rule C_COMPILER__fatfs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -281,7 +281,7 @@ rule C_COMPILER__GUI_unscanned_Debug
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__GUI_unscanned_Debug
+rule CXX_COMPILER__fatfs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -291,7 +291,46 @@ rule CXX_COMPILER__GUI_unscanned_Debug
 #############################################
 # Rule for linking CXX static library.
 
-rule CXX_STATIC_LIBRARY_LINKER__GUI_Debug
+rule CXX_STATIC_LIBRARY_LINKER__fatfs_Debug
+  command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && "P:\CLion\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -E rm -f $TARGET_FILE && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
+  description = Linking CXX static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling ASM files.
+
+rule ASM_COMPILER__sdcard_unscanned_Debug
+  depfile = $DEP_FILE
+  deps = gcc
+  command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -o $out   -c $in
+  description = Building ASM object $out
+
+
+#############################################
+# Rule for compiling C files.
+
+rule C_COMPILER__sdcard_unscanned_Debug
+  depfile = $DEP_FILE
+  deps = gcc
+  command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__sdcard_unscanned_Debug
+  depfile = $DEP_FILE
+  deps = gcc
+  command = ${LAUNCHER}${CODE_CHECK}P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX static library.
+
+rule CXX_STATIC_LIBRARY_LINKER__sdcard_Debug
   command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && "P:\CLion\CLion 2023.3.4\bin\cmake\win\x64\bin\cmake.exe" -E rm -f $TARGET_FILE && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && P:\RaspberryPicoSDK\gcc-arm-none-eabi\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
