@@ -19,7 +19,7 @@
 #include "queue.h"
 
 
-#if 0
+#if 1
 #define DEBUG_LOG(...) printf(__VA_ARGS__)
 #else
 #define DEBUG_LOG(...)
@@ -270,7 +270,7 @@ void vBLE(void *pvParameters)
 
     // set one-shot btstack timer
     heartbeat.process = &heartbeat_handler;
-    btstack_run_loop_set_timer(&heartbeat, LED_SLOW_FLASH_DELAY_MS); //error
+    btstack_run_loop_set_timer(&heartbeat, LED_SLOW_FLASH_DELAY_MS);
     btstack_run_loop_add_timer(&heartbeat);
 
     // turn on!
@@ -278,7 +278,7 @@ void vBLE(void *pvParameters)
 
     while (true)
         {
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(1000));
         }
 }
 
