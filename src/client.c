@@ -11,12 +11,15 @@
 #include "gap.h"
 #include "btstack.h"
 #include "pico/cyw43_arch.h"
-
-//#include "pico/multicore.h"
+#include "pico/multicore.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
 #include "queue.h"
+//LCD
+#include "DEV_Config.h"
+#include "LCD_Driver.h"
+#include "LCD_Touch.h"
 
 
 #if 1
@@ -49,6 +52,16 @@ static gatt_client_characteristic_t server_characteristic;
 static bool listener_registered;
 static gatt_client_notification_t notification_listener;
 static btstack_timer_source_t heartbeat;
+
+SemaphoreHandle_t mutex;
+
+static QueueHandle_t xQueue = NULL;
+
+void vGuardedPrint(char *out){
+    xSemaphoreTake(mutex, portMAX_DELAY);
+    puts(out);
+    xSemaphoreGive(mutex);
+}
 
 static void client_start(void){
     DEBUG_LOG("Start scanning!\n");
@@ -255,6 +268,8 @@ static void heartbeat_handler(struct btstack_timer_source *ts) {
 
 void vBLE(void *pvParameters)
 {
+    //Core usage debugging
+    char *task_name = pcTaskGetName(NULL);
     //BT
     l2cap_init();
     sm_init();
@@ -278,8 +293,51 @@ void vBLE(void *pvParameters)
 
     while (true)
         {
-        vTaskDelay(pdMS_TO_TICKS(1000));
+            //Core usage debugging
+            char out[12];
+            sprintf(out, "Task %s running on Core %d", task_name, get_core_num());
+            vGuardedPrint(out);
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
+}
+
+void vLCD_task(void *pvParameters) {
+    //Core usage debugging
+    char *task_name = pcTaskGetName(NULL);
+    printf("LCD_test Demo\r\n");
+    uint8_t counter = 0;
+    Button myButton = {0, 270, 240, 320};
+
+    System_Init();
+    LCD_SCAN_DIR  lcd_scan_dir = SCAN_DIR_DFT;
+    LCD_Init(lcd_scan_dir,800);
+    TP_Init(lcd_scan_dir);
+
+    //GUI_Show(); //Test if the GUI is working via the example code
+    //Driver_Delay_ms(1500);
+
+    //TP_Adjust(); // Uncomment this line to calibrate the touchscreen
+    drawButton(myButton); // Draw the button for the first time
+    drawTemplate(); // Draw the template for the first time
+
+    while(true) {
+
+        // Check if the touchscreen is pressed
+        //Core usage debugging
+        char out[64];
+        sprintf(out, "Task %s running on Core %d", task_name, get_core_num());
+        vGuardedPrint(out);
+
+        if (isButtonPressed(myButton, lcd_scan_dir)) {
+            button_pressed();
+            drawButton(myButton);
+            drawTemplate();
+            vTaskDelay(pdMS_TO_TICKS(200));
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+    vTaskDelete(NULL); // Delete this task (NULL = this task), normally never reached
 }
 
 int main() {
@@ -291,7 +349,12 @@ int main() {
         return -1;
     }
 
+    mutex = xSemaphoreCreateMutex(); // Create the mutex
+    xQueue = xQueueCreate(1, sizeof(uint)); // Create the queue
+
     xTaskCreate(vBLE, "vBLE", 1024, NULL, 5, NULL);
+
+    xTaskCreate(vLCD_task, "LCD_Task", 4096, NULL, 6, NULL);
 
     vTaskStartScheduler();
 

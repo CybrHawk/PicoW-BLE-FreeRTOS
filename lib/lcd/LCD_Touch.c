@@ -1013,6 +1013,35 @@ void drawButton(Button button) {
 	GUI_DisString_EN(20, 280, "REQUEST DATA", &Font24, MAGENTA, BLUE);
 }
 
+void drawTemplate(void) {
+	// Draw the template here
+	// For example, you might have a function like LCD_DrawRectangle(x, y, width, height, color);
+	GUI_DisString_EN(20, 10, "Value:", &Font24, WHITE, BLACK);
+	//Old values
+	GUI_DisString_EN(10, 50, "Value-1:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(120, 50, "Value-6:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(10, 70, "Value-2:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(120, 70, "Value-7:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(10, 90, "Value-3:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(120, 90, "Value-8:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(10, 110, "Value-4:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(120, 110, "Value-9:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(10, 130, "Value-5:", &Font16, WHITE, GBLUE);
+	GUI_DisString_EN(120, 130, "Value-10:", &Font16, WHITE, GBLUE);
+
+	//Graph
+	GUI_DrawRectangle(40, 240, 235, 242, BLACK, DRAW_FULL, DOT_PIXEL_1X1);
+	GUI_DrawRectangle(40, 160, 42, 242, BLACK, DRAW_FULL, DOT_PIXEL_1X1);
+
+	GUI_DisString_EN(10, 225, "10-", &Font16, WHITE, BLACK);
+	GUI_DisString_EN(10, 210, "20-", &Font16, WHITE, BLACK);
+	GUI_DisString_EN(10, 195, "30-", &Font16, WHITE, BLACK);
+	GUI_DisString_EN(10, 180, "40-", &Font16, WHITE, BLACK);
+	GUI_DisString_EN(10, 165, "50-", &Font16, WHITE, BLACK);
+
+	GUI_DisString_EN(45, 250, "-1  -2  -3  -4  -5  -6  -7  -8  -9 -10", &Font8, WHITE, BLACK);
+}
+
 bool isButtonPressed(Button button, LCD_SCAN_DIR lcd_scan_dir) {
 	char coord_str[20]; // Buffer to hold the coordinate string
 	TP_Scan(0);
@@ -1033,7 +1062,7 @@ bool isButtonPressed(Button button, LCD_SCAN_DIR lcd_scan_dir) {
 
 void button_pressed(void) {
 	// Handle the button press here
-	GUI_DrawRectangle(20,20,40,40, BLUE, DRAW_FULL, DOT_PIXEL_1X1);
+	GUI_DrawRectangle(20,35,40,40, BLUE, DRAW_FULL, DOT_PIXEL_1X1);
 }
 
 

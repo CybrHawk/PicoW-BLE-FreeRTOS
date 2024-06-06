@@ -65,6 +65,12 @@ target_link_libraries(picow_ble_client
         pico_btstack_cyw43
         pico_cyw43_arch_none
         hardware_adc
+        lcd
+        font
+        fatfs
+        sdcard
+        config
+        hardware_spi
 )
 target_include_directories(picow_ble_client PRIVATE
         ${CMAKE_CURRENT_LIST_DIR} # For btstack config
