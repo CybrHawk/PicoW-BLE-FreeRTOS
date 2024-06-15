@@ -28,8 +28,16 @@
 #define DEBUG_LOG(...)
 #endif
 
+#if 0
+#define DEBUG_CORE
+#else
+//Nothing
+#endif
+
 #define LED_QUICK_FLASH_DELAY_MS 100
 #define LED_SLOW_FLASH_DELAY_MS 1000
+
+TaskHandle_t xBLE_Handle = NULL; // Global handle for the BLE task (used in Touch task)
 
 typedef enum {
     TC_OFF,
@@ -53,15 +61,22 @@ static bool listener_registered;
 static gatt_client_notification_t notification_listener;
 static btstack_timer_source_t heartbeat;
 
-SemaphoreHandle_t mutex;
+static QueueHandle_t xQueueBLE_App = NULL;
+static QueueHandle_t xQueueApp_LCD = NULL;
 
-static QueueHandle_t xQueue = NULL;
+#ifdef DEBUG_CORE
+SemaphoreHandle_t mutex;
 
 void vGuardedPrint(char *out){
     xSemaphoreTake(mutex, portMAX_DELAY);
     puts(out);
     xSemaphoreGive(mutex);
 }
+#endif
+
+
+
+
 
 static void client_start(void){
     DEBUG_LOG("Start scanning!\n");
@@ -169,7 +184,8 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
                     DEBUG_LOG("Indication value len %d\n", value_length);
                     if (value_length == 2) {
                         float temp = little_endian_read_16(value, 0);
-                        printf("read temp %.2f degc\n", temp / 100);
+                        printf("hci read temp %.2f degc\n", temp / 100);
+                        xQueueSend(xQueueBLE_App, &temp, portMAX_DELAY);
                     } else {
                         printf("Unexpected length %d\n", value_length);
                     }
@@ -293,12 +309,21 @@ void vBLE(void *pvParameters)
 
     while (true)
         {
+            #ifdef DEBUG_CORE
             //Core usage debugging
-            char out[12];
-            sprintf(out, "Task %s running on Core %d", task_name, get_core_num());
+            char out[64];
+            sprintf(out, "%s running on Core %d", task_name, get_core_num());
             vGuardedPrint(out);
+            #endif
 
-            vTaskDelay(pdMS_TO_TICKS(1000));
+            hci_power_control(HCI_POWER_OFF);
+
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+            hci_power_control(HCI_POWER_ON);
+
+            vTaskDelay(pdMS_TO_TICKS(4000));
+        // Delay for the BLE chip to get out of sleep, connect to the server and receives transmitted values.
         }
 }
 
@@ -306,7 +331,7 @@ void vLCD_task(void *pvParameters) {
     //Core usage debugging
     char *task_name = pcTaskGetName(NULL);
     printf("LCD_test Demo\r\n");
-    uint8_t counter = 0;
+
     Button myButton = {0, 270, 240, 320};
 
     System_Init();
@@ -323,22 +348,84 @@ void vLCD_task(void *pvParameters) {
 
     while(true) {
 
-        // Check if the touchscreen is pressed
+        #ifdef DEBUG_CORE
         //Core usage debugging
         char out[64];
-        sprintf(out, "Task %s running on Core %d", task_name, get_core_num());
+        sprintf(out, "%s running on Core %d", task_name, get_core_num());
         vGuardedPrint(out);
+        #endif
 
-        if (isButtonPressed(myButton, lcd_scan_dir)) {
+        float temperature;
+
+        if  (xQueueReceive(xQueueApp_LCD, &temperature, portMAX_DELAY)) {
+            printf("LCD Task queue received: %.2f\n", temperature / 100);
+
             button_pressed();
             drawButton(myButton);
             drawTemplate();
-            vTaskDelay(pdMS_TO_TICKS(200));
+            drawTemperature(temperature / 100);
+
+
         }
+
+
         vTaskDelay(pdMS_TO_TICKS(100));
     }
-    vTaskDelete(NULL); // Delete this task (NULL = this task), normally never reached
 }
+
+void vTouch_task(void *pvParameters) {
+    //Core usage debugging
+    char *task_name = pcTaskGetName(NULL);
+
+    while (true) {
+        #ifdef DEBUG_CORE
+        //Core usage debugging
+        char out[64];
+        sprintf(out, "%s running on Core %d", task_name, get_core_num());
+        vGuardedPrint(out);
+        #endif
+
+        Button myButton = {0, 270, 240, 320};
+        LCD_SCAN_DIR  lcd_scan_dir = SCAN_DIR_DFT;
+
+        if (isButtonPressed(myButton, lcd_scan_dir)) {
+            xTaskNotifyGive(xBLE_Handle); // Envoyer une notification à la tâche BLE
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+}
+
+void vApplication_task(void *pvParameters) {
+    //Core usage debugging
+    char *task_name = pcTaskGetName(NULL);
+
+    while (true) {
+        #ifdef DEBUG_CORE
+        //Core usage debugging
+        char out[64];
+        sprintf(out, "%s running on Core %d", task_name, get_core_num());
+        vGuardedPrint(out);
+        #endif
+
+        float temperature;
+
+        if  (xQueueReceive(xQueueBLE_App, &temperature, portMAX_DELAY)) {
+            printf("App Task queue received: %.2f\n", temperature / 100);
+            // History management
+            //Array des 10 local arrays dans la vApplication_Task
+
+
+            //Sending to the LCD
+
+            xQueueSend(xQueueApp_LCD, &temperature, portMAX_DELAY);
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+}
+
+
 
 int main() {
     stdio_init_all();
@@ -349,12 +436,20 @@ int main() {
         return -1;
     }
 
+    #ifdef DEBUG_CORE
     mutex = xSemaphoreCreateMutex(); // Create the mutex
-    xQueue = xQueueCreate(1, sizeof(uint)); // Create the queue
+    #endif
 
-    xTaskCreate(vBLE, "vBLE", 1024, NULL, 5, NULL);
+    xQueueApp_LCD = xQueueCreate(1, sizeof(uint)); // Create the queue 1
+    xQueueBLE_App = xQueueCreate(1, sizeof(uint)); // Create the queue 2
+
+    xTaskCreate(vBLE, "vBLE", 1024, NULL, 5, &xBLE_Handle);
 
     xTaskCreate(vLCD_task, "LCD_Task", 4096, NULL, 6, NULL);
+
+    xTaskCreate(vTouch_task, "Touch_Task", 1024, NULL, 4, NULL);
+
+    xTaskCreate(vApplication_task, "App_Task", 1024, NULL, 4, NULL);
 
     vTaskStartScheduler();
 

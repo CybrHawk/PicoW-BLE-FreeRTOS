@@ -1065,4 +1065,10 @@ void button_pressed(void) {
 	GUI_DrawRectangle(20,35,40,40, BLUE, DRAW_FULL, DOT_PIXEL_1X1);
 }
 
+void drawTemperature(float temperature) {
+	char temp_str[10]; // Buffer to hold the temperature string
+	sprintf(temp_str, "%.2f", temperature);
+	GUI_DisString_EN(130, 10, temp_str, &Font20, WHITE, BLACK);
+}
+
 

@@ -70,6 +70,7 @@ void TP_Init( LCD_SCAN_DIR Lcd_ScanDir );
 void drawButton(Button button);
 void button_pressed(void);
 void drawTemplate(void);
+void drawTemperature(float temperature);
 bool isButtonPressed(Button button, LCD_SCAN_DIR lcd_scan_dir);
 
 #endif
